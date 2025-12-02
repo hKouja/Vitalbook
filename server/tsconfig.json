@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    /* ========== File & Module Layout ========== */
+    "target": "es2019",                    // Modern JS output compatible with Node
+    "module": "commonjs",                  // Works perfectly with ts-node (no .js headaches)
+    "rootDir": "./src",                    // Your TypeScript source files
+    "outDir": "./dist",                    // Compiled JS output folder
+
+    /* ========== Interoperability & Environment ========== */
+    "esModuleInterop": true,               // Allows `import express from "express"`
+    "moduleResolution": "node",            // Standard Node.js resolution
+    "resolveJsonModule": true,             // Enables importing JSON if needed
+    "lib": ["esnext"],                     // Enable latest language features
+    "types": ["node"],                     // Type definitions for Node environment
+
+    /* ========== Type Checking ========== */
+    "strict": true,                        // Enable all strict checks
+    "skipLibCheck": true,                  // Skip type checking for node_modules
+    "forceConsistentCasingInFileNames": true,
+
+    /* ========== Source Maps & Declarations ========== */
+    "sourceMap": true,                     // Useful for debugging
+    "declaration": false,                  // You don’t need .d.ts for this backend
+    "noEmitOnError": true                  // Prevent JS output on compile errors
+  },
+
+  "include": ["src"],                      // Compile everything in src/
+  "exclude": ["node_modules", "dist"]      // Ignore build output and dependencies
+}

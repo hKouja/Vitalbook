@@ -1,0 +1,23 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Dashboard from "./pages/Dashboard";
+import Customers from "./pages/Customers";
+import Appointments from "./pages/Appointments";
+import Calendar from "./pages/Calendar";
+
+
+export default function App() {
+   return (
+      <BrowserRouter>
+         <Routes>
+            <Route path="/calendar" element={<Calendar />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/" element={<Login />} />
+            <Route path="/dashboard" element={<Dashboard/>} />
+            <Route path="/customers" element={<Customers/>} />
+            <Route path="/appointments" element={<Appointments />} />
+         </Routes>
+      </BrowserRouter>
+   );
+}
