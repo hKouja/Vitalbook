@@ -12,7 +12,7 @@ export default function Register() {
       e.preventDefault();
       try {
          const data = await register(full_name, email, password);
-         setMessage(`Registered as ${data.full_name}`);
+         setMessage(`Registered as ${data.user.full_name}`);
       } catch {
          setMessage("Registration failed");
       }

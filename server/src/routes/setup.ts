@@ -53,6 +53,19 @@ router.get("/setup-db", async (req, res) => {
          ALTER TABLE staff_users ENABLE ROW LEVEL SECURITY;
          ALTER TABLE customers ENABLE ROW LEVEL SECURITY;
          ALTER TABLE appointments ENABLE ROW LEVEL SECURITY;
+
+         DROP POLICY IF EXISTS staff_users_all ON staff_users;
+         DROP POLICY IF EXISTS customers_all ON customers;
+         DROP POLICY IF EXISTS appointments_all ON appointments;
+
+         CREATE POLICY staff_users_all ON staff_users
+            FOR ALL USING (true) WITH CHECK (true);
+
+         CREATE POLICY customers_all ON customers
+            FOR ALL USING (true) WITH CHECK (true);
+
+         CREATE POLICY appointments_all ON appointments
+            FOR ALL USING (true) WITH CHECK (true);
       `);
 
 
