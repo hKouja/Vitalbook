@@ -1,5 +1,6 @@
 import express from "express";
 import pool from "../db";
+import { requireAuth } from "../middleware/auth";
 // import authMiddleware from "../middleware/authMiddleware";
 
 const router = express.Router();
@@ -7,7 +8,13 @@ const router = express.Router();
 // Get all customers
 router.get("/customers", async (req, res) => {
    try {
-      const result = await pool.query("SELECT * FROM customers ORDER BY created_at DESC");
+      const created_by = req.user!.id;
+      const result = await pool.query(
+         `SELECT * FROM customers
+         WHERE created_by = $1
+         ORDER BY created_at DESC`,
+         [created_by]
+      );
       res.json(result.rows);
    } catch (err) {
       console.error(err);
@@ -18,8 +25,9 @@ router.get("/customers", async (req, res) => {
 //Get customer by ID
 router.get("/customers/:id", async (req, res) => {
    try {
+      const created_by = req.user!.id;
       const { id } = req.params;
-      const result = await pool.query("SELECT * FROM customers WHERE id = $1", [id]);
+      const result = await pool.query("SELECT * FROM customers WHERE id = $1", [id, created_by]);
       if (result.rows.length === 0) return res.status(404).json({ error: "Customer not found" });
       res.json(result.rows[0]);
    } catch (err) {
@@ -37,17 +45,20 @@ router.post("/customers", async (req, res) => {
          return res.status(400).json({ error: "Missing required fields" });
       }
 
+      const created_by = req.user!.id;
+
       const result = await pool.query(
-         `INSERT INTO customers (full_name, phone_number, security_number, color)
-         VALUES ($1, $2, $3, COALESCE($4, '#3b82f6'))
+         `INSERT INTO customers (full_name, phone_number, security_number, color, created_by)
+         VALUES ($1, $2, $3, COALESCE($4, '#3b82f6'), $5)
          RETURNING *`,
          [
-            full_name,
-            phone_number,
-            security_number && security_number.trim() !== "" ? security_number : null,
-            color,
+         full_name,
+         phone_number,
+         security_number?.trim() ? security_number : null,
+         color,
+         created_by,
          ]
-      );
+    );
 
       res.status(201).json(result.rows[0]);
    } catch (err) {
@@ -65,6 +76,8 @@ router.post("/customers", async (req, res) => {
          return res.status(400).json({ error: "Missing required fields" });
       }
 
+      const created_by = req.user!.id;
+
       const result = await pool.query(
          `INSERT INTO customers (full_name, phone_number, security_number, color)
           VALUES ($1, $2, $3, COALESCE($4, '#3b82f6'))
@@ -74,6 +87,7 @@ router.post("/customers", async (req, res) => {
             phone_number,
             security_number && security_number.trim() !== "" ? security_number : null,
             color,
+            created_by,
          ]
       );
 
@@ -88,8 +102,9 @@ router.post("/customers", async (req, res) => {
 //Delete customer
 router.delete("/customers/:id", async (req, res) => {
    try {
+      const created_by = req.user!.id;
       const { id } = req.params;
-      const result = await pool.query("DELETE FROM customers WHERE id = $1 RETURNING *", [id]);
+      const result = await pool.query("DELETE FROM customers WHERE id = $1 RETURNING *", [id, created_by]);
 
       if (result.rows.length === 0) return res.status(404).json({ error: "Customer not found" });
 
