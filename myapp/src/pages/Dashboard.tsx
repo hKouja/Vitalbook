@@ -25,7 +25,6 @@ export default function Dashboard() {
       const token = localStorage.getItem("token");
       //const email = localStorage.getItem("email");
       const name = localStorage.getItem("full_name");
-      const customer = localStorage.getItem("")
 
       // If no token, redirect to login
       if (!token) {

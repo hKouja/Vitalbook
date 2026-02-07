@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { authHeader } from "../api/http"; 
 
 
 interface Appointment {
@@ -32,24 +33,39 @@ export default function Appointments() {
    useEffect(() => {
       const token = localStorage.getItem("token");
       if (!token) {
-         console.log("NO TOKEN → navigating to /");
          navigate("/");
          return;
       }
-      console.log("TOKEN OK → staying on page");
 
       // Load customers
-      fetch(`${API_URL}/customers`)
-         .then((res) => res.json())
+      fetch(`${API_URL}/customers`, {
+         headers: { ...authHeader() },
+      })
+         .then(async (res) => {
+            if (res.status === 401) {
+            navigate("/");
+            throw new Error("Unauthorized");
+            }
+            return res.json();
+         })
          .then(setCustomers)
          .catch((err) => console.error("Error loading customers:", err));
 
       // Load appointments
-      fetch(`${API_URL}/appointments`)
-         .then((res) => res.json())
+      fetch(`${API_URL}/appointments`, {
+         headers: { ...authHeader() },
+      })
+         .then(async (res) => {
+            if (res.status === 401) {
+            navigate("/");
+            throw new Error("Unauthorized");
+            }
+            return res.json();
+         })
          .then(setAppointments)
          .catch((err) => console.error("Error loading appointments:", err));
-   }, [navigate]);
+      }, [navigate]);
+
 
    // Add appointment
    async function handleAddAppointment(e: React.FormEvent) {
@@ -70,7 +86,9 @@ export default function Appointments() {
       try {
          const res = await fetch(`${API_URL}/appointments`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json",
+               ...authHeader(),
+             },
             body: JSON.stringify(newAppointment),
          });
 
