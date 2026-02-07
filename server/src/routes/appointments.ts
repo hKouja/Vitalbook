@@ -1,11 +1,12 @@
 import express from "express";
 import pool from "../db";
 // import authMiddleware from "../middleware/authMiddleware";
+import { requireAuth } from "../middleware/auth";
 
 const router = express.Router();
 
 // Get appointments
-router.get("/appointments", async (req, res) => {
+router.get("/appointments", requireAuth, async (req, res) => {
    try {
       console.log("Fetching appointments...");
       const result = await pool.query("SELECT * FROM appointments ORDER BY start_time ASC");
@@ -18,7 +19,7 @@ router.get("/appointments", async (req, res) => {
 });
 
 // Post appointment
-router.post("/appointments", async (req, res) => {
+router.post("/appointments", requireAuth, async (req, res) => {
    try {
       const { customer_id, start_time, end_time, notes } = req.body;
 
@@ -39,7 +40,7 @@ router.post("/appointments", async (req, res) => {
 });
 
 // UPDATE appointment
-router.put("/appointments/:id", async (req, res) => {
+router.put("/appointments/:id", requireAuth, async (req, res) => {
    try {
       const { id } = req.params;
       const { customer_id, start_time, end_time, notes } = req.body;
@@ -70,7 +71,7 @@ router.put("/appointments/:id", async (req, res) => {
 });
 
 // DELETE appointment
-router.delete("/appointments/:id", async (req, res) => {
+router.delete("/appointments/:id", requireAuth, async (req, res) => {
    try {
       const { id } = req.params;
 
@@ -87,7 +88,7 @@ router.delete("/appointments/:id", async (req, res) => {
    }
 });
 
-router.get("/appointments-with-customers", async (req, res) => {
+router.get("/appointments-with-customers", requireAuth, async (req, res) => {
    try {
       const { start, end } = req.query;
 
@@ -108,7 +109,7 @@ router.get("/appointments-with-customers", async (req, res) => {
 });
 
 // GET appointments for a week
-router.get("/appointments/week", async (req, res) => {
+router.get("/appointments/week", requireAuth, async (req, res) => {
    try {
       const { start, end } = req.query;
 

@@ -6,7 +6,7 @@ import { requireAuth } from "../middleware/auth";
 const router = express.Router();
 
 // Get all customers
-router.get("/customers", async (req, res) => {
+router.get("/customers", requireAuth, async (req, res) => {
    try {
       const created_by = req.user!.id;
       const result = await pool.query(
@@ -23,7 +23,7 @@ router.get("/customers", async (req, res) => {
 });
 
 //Get customer by ID
-router.get("/customers/:id", async (req, res) => {
+router.get("/customers/:id", requireAuth, async (req, res) => {
    try {
       const created_by = req.user!.id;
       const { id } = req.params;
@@ -37,7 +37,7 @@ router.get("/customers/:id", async (req, res) => {
 });
 
 // add a new customer POST
-router.post("/customers", async (req, res) => {
+router.post("/customers", requireAuth, async (req, res) => {
    try {
       const { full_name, phone_number, security_number, color } = req.body;
 
@@ -68,7 +68,7 @@ router.post("/customers", async (req, res) => {
 });
 
 // update customer
-router.post("/customers", async (req, res) => {
+router.post("/customers", requireAuth, async (req, res) => {
    try {
       const { full_name, phone_number, security_number, color } = req.body;
 
@@ -100,7 +100,7 @@ router.post("/customers", async (req, res) => {
 
 
 //Delete customer
-router.delete("/customers/:id", async (req, res) => {
+router.delete("/customers/:id", requireAuth, async (req, res) => {
    try {
       const created_by = req.user!.id;
       const { id } = req.params;
