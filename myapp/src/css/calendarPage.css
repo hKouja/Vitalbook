@@ -1,0 +1,279 @@
+/* CalendarPage.css */
+
+/* Page wrapper (matches your dashboard vibe) */
+.vb-cal-page {
+  padding: 28px 32px;
+  color: var(--text);
+}
+
+/* Header area */
+.vb-cal-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.vb-cal-title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 750;
+  letter-spacing: -0.01em;
+}
+
+/* Calendar card container */
+.vb-cal-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 12px;
+  margin-top: 0px;
+}
+
+/* -----------------------------
+   FullCalendar "Google-like" UI
+------------------------------ */
+
+.vb-cal-card .fc {
+  --fc-border-color: var(--border);
+  --fc-page-bg-color: transparent;
+  --fc-neutral-bg-color: transparent;
+  --fc-today-bg-color: color-mix(in srgb, #4f46e5 10%, transparent);
+  font-size: 13px;
+}
+
+/* Toolbar */
+.vb-cal-card .fc .fc-toolbar {
+  margin-bottom: 10px !important;
+  gap: 10px;
+}
+
+.vb-cal-card .fc .fc-toolbar-title {
+  font-size: 16px;
+  font-weight: 750;
+}
+
+/* Buttons (prev/next/today/views/custom) */
+.vb-cal-card .fc .fc-button {
+  background: transparent !important;
+  border: 1px solid var(--border) !important;
+  color: var(--text) !important;
+  border-radius: 10px !important;
+  padding: 6px 10px !important;
+  font-weight: 650 !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.vb-cal-card .fc .fc-button:hover {
+  background: var(--hover) !important;
+}
+
+.vb-cal-card .fc .fc-button:active {
+  transform: translateY(0.5px);
+}
+
+/* active view button */
+.vb-cal-card .fc .fc-button-primary.fc-button-active {
+  background: var(--active) !important;
+  border-color: color-mix(in srgb, #4f46e5 25%, var(--border)) !important;
+  color: #4338ca !important;
+}
+
+/* Grid look */
+.vb-cal-card .fc .fc-scrollgrid {
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+/* Time labels */
+.vb-cal-card .fc .fc-timegrid-slot-label {
+  color: var(--lightText);
+  font-weight: 600;
+}
+
+/* Now indicator line */
+.vb-cal-card .fc .fc-timegrid-now-indicator-line {
+  border-color: #ef4444 !important;
+}
+.vb-cal-card .fc .fc-timegrid-now-indicator-arrow {
+  border-color: #ef4444 !important;
+}
+
+/* Events */
+.vb-cal-card .fc .fc-event {
+  border-radius: 10px !important;
+  border: none !important;
+  padding: 2px 6px !important;
+  font-weight: 700;
+}
+
+.vb-cal-card .fc .fc-event-title {
+  font-weight: 750;
+}
+
+/* Selection highlight */
+.vb-cal-card .fc .fc-highlight {
+  background: color-mix(in srgb, #4f46e5 18%, transparent) !important;
+}
+
+/* -----------------------------
+   Modals (create/edit/confirm)
+------------------------------ */
+
+.vb-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.vb-modal {
+  width: 440px;
+  max-width: calc(100vw - 24px);
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+}
+
+.vb-modal h3 {
+  margin: 0 0 10px 0;
+  font-size: 16px;
+  font-weight: 750;
+}
+
+.vb-modal-meta {
+  font-size: 12px;
+  color: var(--lightText);
+  margin-bottom: 12px;
+}
+
+.vb-field-label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+  font-weight: 650;
+  color: var(--text);
+}
+
+.vb-input,
+.vb-select,
+.vb-textarea {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 12px;
+  padding: 10px 10px;
+  outline: none;
+}
+
+.vb-textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+.vb-input:focus,
+.vb-select:focus,
+.vb-textarea:focus {
+  border-color: color-mix(in srgb, #4f46e5 45%, var(--border));
+  box-shadow: 0 0 0 3px color-mix(in srgb, #4f46e5 18%, transparent);
+}
+
+/* Modal buttons */
+.vb-modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+
+.vb-btn {
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  border-radius: 12px;
+  padding: 8px 12px;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.vb-btn:hover {
+  background: var(--hover);
+}
+
+.vb-btn-primary {
+  background: #4f46e5;
+  border-color: #4f46e5;
+  color: white;
+}
+
+.vb-btn-primary:hover {
+  background: #4338ca;
+  border-color: #4338ca;
+}
+
+.vb-btn-danger {
+  border-color: color-mix(in srgb, #ef4444 35%, var(--border));
+  color: #ef4444;
+}
+
+.vb-btn-danger:hover {
+  background: color-mix(in srgb, #ef4444 10%, transparent);
+}
+
+/* Edit modal layout */
+.vb-modal-split {
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.vb-modal-left,
+.vb-modal-right {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+
+/* Save bar */
+.vb-savebar {
+  position: sticky;
+  bottom: 14px;
+  margin-top: 14px;
+  z-index: 50;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.15);
+}
+
+.vb-savebar-left {
+  font-weight: 700;
+  color: var(--text);
+}
+
+.vb-savebar-right {
+  display: flex;
+  gap: 10px;
+}
+
+/* little helper spacing (replaces inline div spacer) */
+.vb-spacer-12 {
+  height: 12px;
+}
