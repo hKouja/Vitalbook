@@ -105,7 +105,7 @@ router.get("/appointments-with-customers", requireAuth, async (req, res) => {
       const created_by = req.user!.id;
 
       const result = await pool.query(
-         `SELECT a.*, c.full_name, c.color 
+         `SELECT a.*, c.full_name, c.color, c.phone_number 
           FROM appointments a
           JOIN customers c ON a.customer_id = c.id
           WHERE a.created_by = $1
