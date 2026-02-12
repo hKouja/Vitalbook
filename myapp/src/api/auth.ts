@@ -1,9 +1,11 @@
-const API_URL = "http://localhost:4000/api/auth";
+import { API_BASE } from ".";
+
+const API_URL = `${API_BASE}/api/auth`;
 
 export interface AuthResponse {
-   token: string;
-   full_name: string;
-   email: string;
+  token: string;
+  full_name: string;
+  email: string;
 }
 
 type RegisterResponse = {
@@ -15,18 +17,20 @@ type RegisterResponse = {
   };
 };
 
-
 export async function register(full_name: string, email: string, password: string) {
-   const response = await fetch(`${API_URL}/register`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ full_name, email, password }),
-   });
-   const data = await response.json();
-   if (!response.ok) {
-      throw new Error(("error" in data && data.error) ? data.error : "Registration failed");
-   }
-   return data as RegisterResponse;
+  const response = await fetch(`${API_URL}/register`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ full_name, email, password }),
+  });
+
+  const data = (await response.json()) as Partial<RegisterResponse> & { error?: string };
+
+  if (!response.ok) {
+    throw new Error(data.error || "Registration failed");
+  }
+
+  return data as RegisterResponse;
 }
 
 export async function login(email: string, password: string): Promise<AuthResponse> {

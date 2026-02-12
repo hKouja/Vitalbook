@@ -2,6 +2,10 @@ import { useState } from "react";
 import { register } from "../api/auth";
 import { Link } from "react-router-dom";
 
+import { API_BASE } from "../api";
+
+
+
 export default function Register() {
    const [full_name, setFullName] = useState("");
    const [email, setEmail] = useState("");
@@ -17,6 +21,8 @@ export default function Register() {
          setMessage("Registration failed");
       }
    }
+   console.log("API_BASE is:", API_BASE);
+
 
    return (
       <div className="min-h-screen flex items-center justify-center bg-gray-100">

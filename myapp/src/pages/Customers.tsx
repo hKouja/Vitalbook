@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { authHeader } from "../api/http";
 import  "../css/customer.css"
+import { API_BASE } from "../api";
 
 interface Customer {
    id: string;
@@ -29,7 +30,7 @@ const COLOR_PALETTE = [
 
 type PaletteColor = (typeof COLOR_PALETTE)[number];
 
-const API_URL = "http://localhost:4000/api";
+const API_URL = `${API_BASE}/api`;
 
 export default function Customers() {
    const navigate = useNavigate();

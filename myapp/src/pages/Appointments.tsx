@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { authHeader } from "../api/http"; 
 
+import { API_BASE } from "../api";
 
 interface Appointment {
    id: string;
@@ -16,7 +17,7 @@ interface Customer {
    full_name: string;
 }
 
-const API_URL = "http://localhost:4000/api";
+const API_URL = `${API_BASE}/api`;
 
 export default function Appointments() {
    const navigate = useNavigate();

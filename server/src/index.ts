@@ -5,11 +5,17 @@ import appointmentRoutes from "./routes/appointments";
 import customerRoutes from "./routes/customers";
 import cors from "cors";
 
-
 const app = express();
 const port = 4000;
 
-app.use(cors());
+app.use(cors( {
+  origin: [
+    "http://localhost:5173",
+    "http://192.168.0.20:5173",
+  ],
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+}));
 app.use(express.json());
 
 
@@ -30,6 +36,6 @@ app.use("/api", customerRoutes);
 
 
 
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
+app.listen(port, "0.0.0.0", () => {
+  console.log(`Server running on http://0.0.0.0:${port}`);
 });

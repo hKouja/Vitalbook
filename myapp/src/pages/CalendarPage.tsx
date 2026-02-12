@@ -7,8 +7,9 @@ import interactionPlugin from "@fullcalendar/interaction";
 import type { DateSelectArg, EventInput } from "@fullcalendar/core";
 import { authHeader } from "../api/http";
 import "../css/calendarPage.css";
+import { API_BASE } from "../api";
 
-const API_URL = "http://localhost:4000/api";
+const API_URL = `${API_BASE}/api/`; 
 
 type Customer = { id: string;
   full_name: string; 
@@ -20,13 +21,6 @@ type AppointmentRow = {
   start_time: string; // ISO
   end_time: string;   // ISO
   notes?: string;
-};
-type PendingMove = {
-  id: string;
-  start: Date;
-  end: Date;
-  revert: () => void;
-  oldNotes: string;
 };
 type EditingAppt = {
   id: string;

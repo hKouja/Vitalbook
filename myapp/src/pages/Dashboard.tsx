@@ -7,6 +7,10 @@ import "../css/dashboard.css";
 import calendar from "../assets/icons/calendar3.png";
 import pin from "../assets/icons/pin3.png";
 import customer from "../assets/icons/customer3.png";
+import { API_BASE } from "../api";
+
+const API_URL = `${API_BASE}/api`;
+
 
 interface Appointment {
    id: string;
@@ -16,14 +20,14 @@ interface Appointment {
    full_name?: string;
    color?: string;
    phone_number?: string;
-}
-
-interface Customer {
-   id: string;
-   full_name: string;
-}
-
-export default function Dashboard() {
+   }
+   
+   interface Customer {
+      id: string;
+      full_name: string;
+      }
+      
+      export default function Dashboard() {
 
    const navigate = useNavigate();
    const [fullName, setFullName] = useState("");
@@ -50,7 +54,7 @@ export default function Dashboard() {
       //setUserEmail(email || "");
 
       // Fetch customers
-      fetch("http://localhost:4000/api/customers", {
+      fetch(`${API_URL}api/customers`, {
          headers: { Authorization: `Bearer ${token}` },
       })
          .then((res) => res.json())
@@ -59,7 +63,7 @@ export default function Dashboard() {
 
       // Fetch appointments (with customers)
       fetch(
-         `http://localhost:4000/api/appointments-with-customers?start=${encodeURIComponent(
+         `${API_URL}/appointments-with-customers?start=${encodeURIComponent(
             todayStart.toISOString()
          )}&end=${encodeURIComponent(todayEnd.toISOString())}`,
          {
