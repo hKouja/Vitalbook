@@ -11,8 +11,6 @@ import lightCust from "../assets/icons/customer1.png";
 import darkCust from "../assets/icons/customer2.png";
 import lightSign from "../assets/icons/signout1.png";
 import darkSign from "../assets/icons/signout2.png";
-//import moon from "../assets/icons/moon.png";
-//import sun from "../assets/icons/sun.png";
 
 export default function Layout() {
 
@@ -28,6 +26,17 @@ export default function Layout() {
   const location = useLocation();
 
   const [isDark, setIsDark] = useState(false);
+
+  const [isNavOpen, setIsNavOpen] = useState(false);
+
+  function closeNav() {
+    setIsNavOpen(false);
+  }
+
+  useEffect(() => {
+    setIsNavOpen(false);
+  }, [location.pathname]);
+
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -158,7 +167,79 @@ export default function Layout() {
       {/* Main content */}
       <main className="vb-main">
         <Outlet />
+        <button
+            className="vb-hamburger"
+            type="button"
+            onClick={() => setIsNavOpen(true)}
+            aria-label="Open menu"
+            >
+            <span />
+            <span />
+            <span />
+        </button>
       </main>
+
+
+      {/* Mobile drawer overlay */}
+        <div
+        className={`vb-drawer-overlay ${isNavOpen ? "is-open" : ""}`}
+        onClick={closeNav}
+        >
+        <aside className="vb-drawer" onClick={(e) => e.stopPropagation()}>
+            <div className="vb-drawer-head">
+            <div className="vb-brand">
+                <div className="vb-logo">V</div>
+                <div className="vb-brand-text">
+                <div className="vb-brand-title">Vitalbook</div>
+                <div className="vb-brand-subtitle">Booking System</div>
+                </div>
+            </div>
+
+            <button className="vb-drawer-close" onClick={closeNav} type="button" aria-label="Close menu">
+                ✕
+            </button>
+            </div>
+
+            <nav className="vb-nav">
+            <Link to="/dashboard" className={`vb-nav-item ${isActive("/dashboard") ? "vb-active" : ""}`}>
+                <span className="vb-nav-icon">
+                <ThemeIcon isDark={isDark} lightSrc={lightDash} darkSrc={darkDash} alt="Dashboard" />
+                </span>
+                Dashboard
+            </Link>
+
+            <Link to="/calendar" className={`vb-nav-item ${isActive("/calendar") ? "vb-active" : ""}`}>
+                <span className="vb-nav-icon">
+                <ThemeIcon isDark={isDark} lightSrc={lightCal} darkSrc={darkCal} alt="Calendar" />
+                </span>
+                Calendar
+            </Link>
+
+            <Link to="/customers" className={`vb-nav-item ${isActive("/customers") ? "vb-active" : ""}`}>
+                <span className="vb-nav-icon">
+                <ThemeIcon isDark={isDark} lightSrc={lightCust} darkSrc={darkCust} alt="Customers" />
+                </span>
+                Customers
+            </Link>
+
+            <Link to="/appointments" className={`vb-nav-item ${isActive("/appointments") ? "vb-active" : ""}`}>
+                <span className="vb-nav-icon">
+                <ThemeIcon isDark={isDark} lightSrc={lightPin} darkSrc={darkPin} alt="Appointments" />
+                </span>
+                Appointments
+            </Link>
+            </nav>
+
+            <div className="vb-sidebar-footer">
+            <button className="vb-signout" onClick={handleLogout} type="button">
+                <span className="vb-nav-icon">
+                <ThemeIcon isDark={isDark} lightSrc={lightSign} darkSrc={darkSign} alt="Sign out" />
+                </span>
+                Sign out
+            </button>
+            </div>
+        </aside>
+        </div>
     </div>
   );
 }

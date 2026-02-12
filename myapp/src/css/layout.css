@@ -1,4 +1,4 @@
-:root {
+:root{
   --bg: #f8fafc;
   --panel: #ffffff;
   --text: #0f172a;
@@ -8,7 +8,7 @@
   --active: #eef2ff;
 }
 
-.dark {
+.dark{
   --bg: #0b1220;
   --panel: #0f172a;
   --text: #e2e8f0;
@@ -18,19 +18,21 @@
   --active: #172554;
 }
 
-
-.vb-app {
+.vb-app{
   min-height: 100vh;
   width: 100%;
   display: flex;
   background: var(--bg);
-  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Liberation Sans";
   color: var(--text);
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Liberation Sans";
 }
 
-/* Sidebar */
-.vb-sidebar {
+/* =========================
+   Sidebar (desktop)
+========================= */
+.vb-sidebar{
   width: 260px;
+  flex: 0 0 260px;
   background: var(--panel);
   border-right: 1px solid var(--border);
   padding: 20px 16px;
@@ -38,60 +40,100 @@
   flex-direction: column;
 }
 
-.vb-brand {
+.vb-brand{
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 6px 6px;
-  padding-bottom: 15px;
-  margin-bottom: 22px;
-
+  padding: 6px 6px 14px;
+  margin-bottom: 18px;
   border-bottom: 1px solid var(--border);
 }
 
-.vb-brand-text {
-  position: relative;
-  display: inline-block;
-  padding-right: 60px;
-  min-width: 0;
-}
-
-
-.vb-logo {
+.vb-logo{
   width: 42px;
   height: 42px;
   flex: 0 0 42px;
   border-radius: 14px;
   background: #4f46e5;
-  color: white;
+  color: #fff;
   display: grid;
   place-items: center;
   font-weight: 800;
   letter-spacing: 0.5px;
 }
 
-.vb-brand-title {
+.vb-brand-text{
+  min-width: 0;
+}
+
+.vb-brand-title{
   font-weight: 700;
   font-size: 16px;
   line-height: 1.1;
-  min-width: 0;
 }
 
-.vb-brand-subtitle {
-  font-size: 12px;
-  color: var(--text);
+.vb-brand-subtitle{
   margin-top: 2px;
-  min-width: 0;
+  font-size: 12px;
+  color: var(--muted);
 }
 
-.vb-nav {
+/* Theme toggle lives at the right of brand row */
+.vb-theme-toggle{
+  margin-left: auto;
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+}
+
+.vb-theme-toggle:focus{ outline: none; }
+.vb-theme-toggle:focus-visible{
+  outline: 2px solid rgba(79, 70, 229, 0.7);
+  outline-offset: 2px;
+}
+
+/* Switch */
+.vb-switch{
+  width: 56px;
+  height: 24px;
+  border-radius: 999px;
+  background: #cbd5e1;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.18s ease;
+  flex: 0 0 auto;
+}
+
+.dark .vb-switch{ background: #334155; }
+.vb-switch-on{ background: #4f46e5; }
+
+.vb-switch-thumb{
+  width: 19px;
+  height: 19px;
+  border-radius: 999px;
+  background: #fff;
+  position: absolute;
+  top: 2.5px;
+  left: 3px;
+  transition: transform 0.18s ease;
+}
+
+.vb-switch-on .vb-switch-thumb{
+  transform: translateX(32px);
+}
+
+/* Nav */
+.vb-nav{
   display: flex;
   flex-direction: column;
   gap: 6px;
   margin-top: 8px;
 }
 
-.vb-nav-item {
+.vb-nav-item{
   display: flex;
   align-items: center;
   gap: 10px;
@@ -102,29 +144,34 @@
   transition: background 0.15s ease, color 0.15s ease;
 }
 
-.vb-nav-item:hover {
-  background: var(--hover);
-}
+.vb-nav-item:hover{ background: var(--hover); }
 
-.vb-nav-icon {
+.vb-nav-icon{
   width: 22px;
   display: inline-flex;
   justify-content: center;
 }
 
-.vb-active {
+.vb-active{
   background: var(--active);
   color: #4338ca;
   font-weight: 600;
 }
 
-.vb-sidebar-footer {
+.vb-nav-icon-img{
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  display: block;
+}
+
+.vb-sidebar-footer{
   margin-top: auto;
   padding-top: 16px;
   border-top: 1px solid var(--border);
 }
 
-.vb-signout {
+.vb-signout{
   width: 100%;
   border: none;
   background: transparent;
@@ -137,118 +184,139 @@
   gap: 10px;
   transition: background 0.15s ease, color 0.15s ease;
   text-align: left;
-  font: inherit; /* important: makes button text match links */
+  font: inherit;
 }
 
-.vb-signout:hover {
-  background: var(--hover);
-}
+.vb-signout:hover{ background: var(--hover); }
 
-
-/* Main */
-.vb-main {
+/* =========================
+   Main
+========================= */
+.vb-main{
   flex: 1;
   width: 100%;
   min-width: 0;
   padding: 28px 32px;
 }
 
-@media (max-width: 980px) {
-  .vb-sidebar {
-    width: 220px;
-    flex: 0 0 260px;
-  }
+/* =========================
+   Mobile Drawer + Hamburger
+========================= */
 
-  .vb-main {
-    padding: 20px;
-  }
-}
+/* Hamburger button */
+.vb-hamburger{
+  display: none;
+  position: fixed;
+  top: 14px;
+  left: 14px;
+  z-index: 10001;
 
-@media (max-width: 720px) {
-  .vb-sidebar {
-    width: 190px;
-    flex: 0 0 190px;
-  }
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
 
-  .vb-main {
-    padding: 16px;
-  }
-}
-
-.vb-theme-toggle {
   border: none;
-  background: transparent;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0;
-  margin: 0;
-  width: fit-content;
+  background: var(--panel);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.22);
+
   cursor: pointer;
-  color: var(--text);
-  display: inline-flex;
-  
+  padding: 0;
+
+  align-items: center;
+  justify-content: center;
+}
+
+.vb-hamburger:hover{ background: var(--hover); }
+
+.vb-hamburger span{
   position: absolute;
-
-}
-
-.vb-theme-toggle{
-  margin-left: auto;
-  position: static;
-  margin-top: auto;      
-}
-
-.vb-theme-toggle:focus {
-  outline: none;
-  box-shadow: none;
-}
-
-.vb-theme-toggle:focus-visible {
-  outline: 2px solid rgba(79, 70, 229, 0.7); /* nice focus ring */
-  outline-offset: 2px;
-}
-
-
-/* Switch */
-.vb-switch {
-  width: 56px;
-  height: 24px;
+  width: 18px;
+  height: 2px;
   border-radius: 999px;
-  background: #cbd5e1; /* light off */
-  position: relative;
-  transition: background 0.18s ease;
-  flex: 0 0 auto;
+  background: var(--text);
+  transition: transform 0.18s ease, opacity 0.18s ease;
+}
+
+.vb-hamburger span:nth-child(1){ transform: translateY(-6px); }
+.vb-hamburger span:nth-child(2){ transform: translateY(0); }
+.vb-hamburger span:nth-child(3){ transform: translateY(6px); }
+
+/* turn into X when open */
+.vb-hamburger.is-open span:nth-child(1){ transform: rotate(45deg); }
+.vb-hamburger.is-open span:nth-child(2){ opacity: 0; }
+.vb-hamburger.is-open span:nth-child(3){ transform: rotate(-45deg); }
+
+/* Drawer overlay */
+.vb-drawer-overlay{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease;
+  z-index: 10000;
+}
+
+.vb-drawer-overlay.is-open{
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Drawer panel */
+.vb-drawer{
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 280px;
+  max-width: calc(100vw - 64px);
+
+  background: var(--panel);
+  border-right: 1px solid var(--border);
+
+  transform: translateX(-100%);
+  transition: transform 0.2s ease;
+
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
 }
 
-.dark .vb-switch {
-  background: #334155; /* dark off */
+.vb-drawer-overlay.is-open .vb-drawer{
+  transform: translateX(0);
 }
 
-.vb-switch-on {
-  background: #4f46e5; /* on */
+/* Drawer head */
+.vb-drawer-head{
+  padding: 18px 14px 14px;
+  border-bottom: 1px solid var(--border);
 }
 
-.vb-switch-thumb {
-  width: 19px;
-  height: 19px;
-  border-radius: 999px;
-  background: white;
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  transition: transform 0.18s ease;
+/* Make only nav scroll, footer stays visible */
+.vb-drawer .vb-nav{
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 12px 14px;
+  margin-top: 0;
 }
 
-.vb-switch-on .vb-switch-thumb {
-  transform: translateX(32px);
+.vb-drawer .vb-sidebar-footer{
+  flex: 0 0 auto;
+  margin-top: 0;
+  padding: 12px 14px 18px;
+  border-top: 1px solid var(--border);
+  background: var(--panel);
 }
 
- /* icons */ 
-.vb-nav-icon-img{
-  width: 18px;
-  height: 18px;
-  object-fit: contain;
-  display: block;
+/* =========================
+   Responsive
+========================= */
+@media (max-width: 900px){
+  .vb-sidebar{ display: none; }
+  .vb-hamburger{ display: inline-flex; }
+  .vb-main{ padding: 16px; padding-top: 70px; }
 }
 
+@media (min-width: 901px){
+  .vb-drawer-overlay{ display: none !important; }
+}
