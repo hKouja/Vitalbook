@@ -54,7 +54,7 @@ interface Appointment {
       //setUserEmail(email || "");
 
       // Fetch customers
-      fetch(`${API_URL}api/customers`, {
+      fetch(`${API_URL}/customers`, {
          headers: { Authorization: `Bearer ${token}` },
       })
          .then((res) => res.json())

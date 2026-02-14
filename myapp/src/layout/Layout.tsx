@@ -11,6 +11,12 @@ import lightCust from "../assets/icons/customer1.png";
 import darkCust from "../assets/icons/customer2.png";
 import lightSign from "../assets/icons/signout1.png";
 import darkSign from "../assets/icons/signout2.png";
+import moon from "../assets/icons/moon.png";
+import sun from "../assets/icons/sun.png";
+import close1 from "../assets/icons/close1.png";
+import close2 from "../assets/icons/close2.png";
+
+
 
 export default function Layout() {
 
@@ -19,6 +25,7 @@ export default function Layout() {
     lightSrc: string;
     darkSrc: string;
     alt: string;
+    className?: string;
   };
 
 
@@ -44,17 +51,23 @@ export default function Layout() {
   }, [navigate]);
 
   useEffect(() => {
-    const saved = localStorage.getItem("theme");
+    const saved = localStorage.getItem("vb_theme");
     const dark = saved === "dark";
     setIsDark(dark);
     document.documentElement.classList.toggle("dark", dark);
   }, []);
 
+  useEffect(() => {
+    document.body.style.overflow = isNavOpen ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [isNavOpen]);
+
+
   function toggleTheme() {
     setIsDark((prev) => {
         const next = !prev;
         document.documentElement.classList.toggle("dark", next);
-        localStorage.setItem("theme", next ? "dark" : "light");
+        localStorage.setItem("vb_theme", next ? "dark" : "light");
         return next;
     });
   }
@@ -70,12 +83,12 @@ export default function Layout() {
     location.pathname === path || location.pathname.startsWith(path + "/");
 
   //icons here:
-  function ThemeIcon({ isDark, lightSrc, darkSrc, alt }: ThemeIconProps) {
+  function ThemeIcon({ isDark, lightSrc, darkSrc, alt, className }: ThemeIconProps) {
     return (
         <img
         src={isDark ? lightSrc : darkSrc}
         alt={alt}
-        className="vb-nav-icon-img"
+        className={className ?? "vb-nav-icon-img"}
         draggable={false}
         />
     );
@@ -91,11 +104,6 @@ export default function Layout() {
             <div className="vb-brand-title">Vitalbook</div>
             <div className="vb-brand-subtitle">Booking System</div>
           </div>
-        <button className="vb-theme-toggle" onClick={toggleTheme} type="button">
-            <span className={`vb-switch ${isDark ? "vb-switch-on" : ""}`}>
-                <span className="vb-switch-thumb" />
-            </span>
-        </button>
         </div>
 
         <nav className="vb-nav">
@@ -149,35 +157,67 @@ export default function Layout() {
         </nav>
 
         <div className="vb-sidebar-footer">
-          <button className="vb-signout" onClick={handleLogout}>
-            <span className="vb-nav-icon">
+            <button className="vb-signout" onClick={handleLogout}>
+                <span className="vb-nav-icon">
+                    <ThemeIcon 
+                        isDark={isDark}
+                        lightSrc={lightSign}
+                        darkSrc={darkSign}
+                        alt="Sign out"
+                    />
+                </span>
+                Sign out
+            </button>
+            <button className="vb-theme-toggle" onClick={toggleTheme} type="button" aria-label="Toggle theme">
+            <span className="vb-theme-icon" aria-hidden="true">
                 <ThemeIcon 
                     isDark={isDark}
-                    lightSrc={lightSign}
-                    darkSrc={darkSign}
-                    alt="Sign out"
+                    lightSrc={sun}
+                    darkSrc={moon}
+                    alt="Theme"
+                    className="vb-theme-toggle-icon"
                 />
             </span>
-            Sign out
-          </button>
+            </button>
         </div>
           
       </aside>
 
       {/* Main content */}
-      <main className="vb-main">
-        <Outlet />
-        <button
-            className="vb-hamburger"
-            type="button"
-            onClick={() => setIsNavOpen(true)}
-            aria-label="Open menu"
-            >
-            <span />
-            <span />
-            <span />
-        </button>
-      </main>
+<main className="vb-main">
+
+  {/* Mobile header (only visible on small screens via CSS) */}
+  <header className="vb-mobile-header">
+    <button
+      className={`vb-hamburger ${isNavOpen ? "is-open" : ""}`}
+      type="button"
+      onClick={() => setIsNavOpen((prev) => !prev)}
+      aria-label={isNavOpen ? "Close menu" : "Open menu"}
+      aria-expanded={isNavOpen}
+    >
+      <span />
+      <span />
+      <span />
+    </button>
+
+    <div className="vb-mobile-brand">
+      <span className="vb-mobile-title">Vitalbook</span>
+    </div>
+
+    <button className="vb-theme-toggle" onClick={toggleTheme} type="button" aria-label="Toggle theme">
+      <ThemeIcon
+        isDark={isDark}
+        lightSrc={sun}
+        darkSrc={moon}
+        alt=""
+        className="vb-theme-toggle-icon"
+      />
+    </button>
+  </header>
+
+  <Outlet />
+</main>
+
 
 
       {/* Mobile drawer overlay */}
@@ -196,7 +236,12 @@ export default function Layout() {
             </div>
 
             <button className="vb-drawer-close" onClick={closeNav} type="button" aria-label="Close menu">
-                ✕
+                <ThemeIcon 
+                    isDark={isDark}
+                    lightSrc={close1}
+                    darkSrc={close2}
+                    alt="Close"
+                />
             </button>
             </div>
 
@@ -231,12 +276,22 @@ export default function Layout() {
             </nav>
 
             <div className="vb-sidebar-footer">
-            <button className="vb-signout" onClick={handleLogout} type="button">
-                <span className="vb-nav-icon">
-                <ThemeIcon isDark={isDark} lightSrc={lightSign} darkSrc={darkSign} alt="Sign out" />
+                <button className="vb-signout" onClick={handleLogout} type="button">
+                    <span className="vb-nav-icon">
+                    <ThemeIcon isDark={isDark} lightSrc={lightSign} darkSrc={darkSign} alt="Sign out" />
+                    </span>
+                    Sign out
+                </button>
+                <button className="vb-theme-toggle" onClick={toggleTheme} type="button" aria-label="Toggle theme">
+                <span className="vb-theme-icon" aria-hidden="true">
+                    <ThemeIcon 
+                        isDark={isDark}
+                        lightSrc={sun}
+                        darkSrc={moon}
+                        alt="Theme"
+                    />
                 </span>
-                Sign out
-            </button>
+                </button>
             </div>
         </aside>
         </div>

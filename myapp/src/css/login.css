@@ -1,0 +1,163 @@
+:root {
+  --bg: #f8fafc;
+  --panel: #ffffff;
+  --text: #0f172a;
+  --muted: #64748b;
+  --border: #e2e8f0;
+  --hover: #f1f5f9;
+  --active: #eef2ff;
+  --lightText: #64748b;
+
+  --primary: #4f46e5;
+  --primaryHover: #4338ca;
+}
+
+.dark {
+  --bg: #0b1220;
+  --panel: #0f172a;
+  --text: #e2e8f0;
+  --muted: #94a3b8;
+  --border: #1e293b;
+  --hover: #111c33;
+  --active: #172554;
+  --lightText: #848e9b;
+
+  --primary: #818cf8;
+  --primaryHover: #a5b4fc;
+}
+
+.vb-login,
+.vb-login * ,
+.vb-login *::before,
+.vb-login *::after{
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+/* reuse the same auth layout styles */
+.vb-login.vb-auth{
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: var(--panel);
+  color: var(--text);
+}
+
+.vb-login .vb-auth-card{
+  width: 100%;
+  max-width: 420px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 18px;
+  overflow: hidden;
+}
+
+.vb-login .vb-auth-head{ margin-bottom: 14px; }
+
+.vb-login .vb-auth-title{
+  margin: 0;
+  font-size: 26px;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+}
+
+.vb-login .vb-auth-subtitle{
+  margin: 8px 0 0 0;
+  color: var(--lightText);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.vb-login .vb-auth-form{
+  display: grid;
+  gap: 12px;
+}
+
+.vb-login .vb-field{
+  display: grid;
+  gap: 6px;
+}
+
+.vb-login .vb-label{
+  font-size: 13px;
+  color: var(--lightText);
+  font-weight: 600;
+}
+
+.vb-login .vb-input{
+  width: 100%;
+  max-width: 100%;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-size: 14px;
+  outline: none;
+}
+
+.vb-login .vb-input:focus{
+  border-color: rgba(79, 70, 229, 0.6);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+}
+
+.vb-login .vb-auth-actions{
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 4px;
+}
+
+.vb-login .vb-btn{
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.vb-login .vb-btn:hover{ background: var(--hover); }
+
+.vb-login .vb-btn:disabled{
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.vb-login .vb-btn-primary{
+  border-color: rgba(79, 70, 229, 0.35);
+  background: var(--primary);
+  color: white;
+}
+
+.vb-login .vb-btn-primary:hover{ background: var(--primaryHover); }
+
+.vb-login .vb-auth-footer{
+  margin: 6px 0 0 0;
+  font-size: 14px;
+  color: var(--lightText);
+}
+
+.vb-login .vb-link{
+  text-decoration: none;
+  color: var(--primary);
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.vb-login .vb-link:hover{ color: var(--primaryHover); }
+
+.vb-login .vb-alert{
+  border: 1px solid var(--border);
+  background: var(--panel);
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-size: 13px;
+}
+
+.vb-login .vb-alert-ok{ border-color: rgba(16, 185, 129, 0.35); }
+.vb-login .vb-alert-error{ border-color: rgba(239, 68, 68, 0.35); }

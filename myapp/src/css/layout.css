@@ -6,6 +6,8 @@
   --border: #e2e8f0;
   --hover: #f1f5f9;
   --active: #eef2ff;
+  --primary: #4f46e5;
+  --primaryHover: #4338ca;
 }
 
 .dark{
@@ -16,6 +18,14 @@
   --border: #1e293b;
   --hover: #111c33;
   --active: #172554;
+  --primary: #818cf8;
+  --primaryHover: #a5b4fc;
+}
+
+*,
+*::before,
+*::after{
+  box-sizing: border-box;
 }
 
 .vb-app{
@@ -54,7 +64,7 @@
   height: 42px;
   flex: 0 0 42px;
   border-radius: 14px;
-  background: #4f46e5;
+  background: var(--primary);
   color: #fff;
   display: grid;
   place-items: center;
@@ -62,9 +72,7 @@
   letter-spacing: 0.5px;
 }
 
-.vb-brand-text{
-  min-width: 0;
-}
+.vb-brand-text{ min-width: 0; }
 
 .vb-brand-title{
   font-weight: 700;
@@ -76,53 +84,6 @@
   margin-top: 2px;
   font-size: 12px;
   color: var(--muted);
-}
-
-/* Theme toggle lives at the right of brand row */
-.vb-theme-toggle{
-  margin-left: auto;
-  border: none;
-  background: transparent;
-  padding: 0;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-}
-
-.vb-theme-toggle:focus{ outline: none; }
-.vb-theme-toggle:focus-visible{
-  outline: 2px solid rgba(79, 70, 229, 0.7);
-  outline-offset: 2px;
-}
-
-/* Switch */
-.vb-switch{
-  width: 56px;
-  height: 24px;
-  border-radius: 999px;
-  background: #cbd5e1;
-  position: relative;
-  overflow: hidden;
-  transition: background 0.18s ease;
-  flex: 0 0 auto;
-}
-
-.dark .vb-switch{ background: #334155; }
-.vb-switch-on{ background: #4f46e5; }
-
-.vb-switch-thumb{
-  width: 19px;
-  height: 19px;
-  border-radius: 999px;
-  background: #fff;
-  position: absolute;
-  top: 2.5px;
-  left: 3px;
-  transition: transform 0.18s ease;
-}
-
-.vb-switch-on .vb-switch-thumb{
-  transform: translateX(32px);
 }
 
 /* Nav */
@@ -154,7 +115,7 @@
 
 .vb-active{
   background: var(--active);
-  color: #4338ca;
+  color: var(--primaryHover);
   font-weight: 600;
 }
 
@@ -165,29 +126,88 @@
   display: block;
 }
 
+/* Footer row (Sign out + Theme toggle) */
 .vb-sidebar-footer{
   margin-top: auto;
   padding-top: 16px;
   border-top: 1px solid var(--border);
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
+/* Sign out looks like other sidebar items */
 .vb-signout{
-  width: 100%;
+  flex: 1;
+  width: auto;
   border: none;
   background: transparent;
   border-radius: 12px;
   padding: 10px 12px;
   cursor: pointer;
+
   color: var(--text);
   display: flex;
   align-items: center;
   gap: 10px;
+
   transition: background 0.15s ease, color 0.15s ease;
   text-align: left;
   font: inherit;
 }
 
 .vb-signout:hover{ background: var(--hover); }
+
+/* Theme toggle (perfect square, same hover behavior) */
+.vb-theme-toggle{
+  flex: 0 0 auto;
+  flex-shrink: 0;
+
+  height: 44px;
+  aspect-ratio: 1 / 1;
+  width: auto;
+
+  padding: 0;
+  margin: 0;
+
+  border: none;
+  background: transparent;
+  border-radius: 14px;
+
+  display: grid;
+  place-items: center;
+
+  cursor: pointer;
+  line-height: 0;
+}
+
+.vb-theme-toggle:hover{
+  background: var(--hover);
+}
+
+.vb-theme-toggle:focus,
+.vb-theme-toggle:focus-visible{
+  outline: none;
+  box-shadow: none;
+}
+
+.vb-theme-icon{
+  display: block;
+  object-fit: contain;
+  line-height: 1;
+  width: 18px;
+  height: 18px;
+}
+
+.vb-theme-toggle-icon{
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  transform: scale(1.5);
+  transform-origin: center;
+}
+
 
 /* =========================
    Main
@@ -254,7 +274,7 @@
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.18s ease;
-  z-index: 10000;
+  z-index: 10002;
 }
 
 .vb-drawer-overlay.is-open{
@@ -286,13 +306,52 @@
   transform: translateX(0);
 }
 
-/* Drawer head */
+/* Drawer head (brand + close) */
 .vb-drawer-head{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
   padding: 18px 14px 14px;
   border-bottom: 1px solid var(--border);
 }
 
-/* Make only nav scroll, footer stays visible */
+.vb-drawer-head .vb-brand{
+  margin: 0;
+  padding: 0;
+  border-bottom: none;
+  gap: 10px;
+}
+
+/* Close button */
+.vb-drawer-close{
+  flex: 0 0 auto;
+  flex-shrink: 0;
+
+  height: 44px;
+  aspect-ratio: 1 / 1;
+  width: auto;
+
+  padding: 0;
+  margin: 0;
+
+  border: none;
+  background: transparent;
+  border-radius: 14px;
+
+  display: grid;
+  place-items: center;
+
+  cursor: pointer;
+  line-height: 0;
+}
+
+.vb-drawer-close:hover{
+  background: var(--hover);
+}
+
+/* Drawer content scroll */
 .vb-drawer .vb-nav{
   flex: 1 1 auto;
   overflow-y: auto;
@@ -300,6 +359,7 @@
   margin-top: 0;
 }
 
+/* Drawer footer uses same layout as sidebar footer */
 .vb-drawer .vb-sidebar-footer{
   flex: 0 0 auto;
   margin-top: 0;
@@ -309,12 +369,92 @@
 }
 
 /* =========================
+   Mobile Header (only when sidebar is hidden)
+========================= */
+/* hidden by default (desktop) */
+.vb-mobile-header{
+  margin: -16px -16px 16px -16px; /* cancel main padding */
+  padding: 0 12px;                /* real header padding */
+  border-radius: 0;               /* flat header */
+  display: none;
+}
+
+/* mobile only */
+@media (max-width: 900px){
+  .vb-mobile-header{
+    display: flex;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    height: 56px;
+    padding: 0 12px;
+    background: var(--panel);
+    border-bottom: 1px solid var(--border);
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  /* hamburger should NOT be fixed inside the header */
+  .vb-mobile-header .vb-hamburger{
+    position: relative;
+    top: auto;
+    left: auto;
+    z-index: auto;
+    box-shadow: none;
+    display: inline-flex;
+  }
+
+  .vb-mobile-brand{
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+  }
+
+  .vb-mobile-title{
+    font-weight: 800;
+    font-size: 16px;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* main padding normal again */
+  .vb-main{
+    padding: 16px;
+  }
+}
+
+
+/* =========================
    Responsive
 ========================= */
 @media (max-width: 900px){
   .vb-sidebar{ display: none; }
   .vb-hamburger{ display: inline-flex; }
   .vb-main{ padding: 16px; padding-top: 70px; }
+
+  .vb-mobile-header{ 
+    display: flex; 
+    --mobile-header-top-gap: 0x;
+    margin-top: var(--mobile-header-top-gap);
+    margin: 10px 6px 16px;
+    padding: 0 12px;
+
+    height: 56px;
+    background: var(--panel);
+
+    border: none;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+  }
+
+  .vb-main{
+    padding: 16px;
+  }
 }
 
 @media (min-width: 901px){

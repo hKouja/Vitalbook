@@ -1,0 +1,134 @@
+.vb-auth,
+.vb-auth * ,
+.vb-auth *::before,
+.vb-auth *::after{
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+.vb-auth{
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: var(--panel);
+  color: var(--text);
+}
+
+.vb-auth-card{
+  width: 100%;
+  max-width: 420px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 18px;
+  overflow: hidden;
+}
+
+.vb-auth-head{ margin-bottom: 14px; }
+
+.vb-auth-title{
+  margin: 0;
+  font-size: 26px;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+}
+
+.vb-auth-subtitle{
+  margin: 8px 0 0 0;
+  color: var(--lightText);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.vb-auth-form{
+  display: grid;
+  gap: 12px;
+}
+
+.vb-field{
+  display: grid;
+  gap: 6px;
+}
+
+.vb-label{
+  font-size: 13px;
+  color: var(--lightText);
+  font-weight: 600;
+}
+
+.vb-input{
+  width: 100%;
+  max-width: 100%;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-size: 14px;
+  outline: none;
+}
+
+.vb-input:focus{
+  border-color: rgba(79, 70, 229, 0.6);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+}
+
+.vb-auth-actions{
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 4px;
+}
+
+.vb-btn{
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.vb-btn:hover{ background: var(--hover); }
+
+.vb-btn:disabled{
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.vb-btn-primary{
+  border-color: rgba(79, 70, 229, 0.35);
+  background: var(--primary);
+  color: white;
+}
+
+.vb-btn-primary:hover{ background: var(--primaryHover); }
+
+.vb-auth-footer{
+  margin: 6px 0 0 0;
+  font-size: 14px;
+  color: var(--lightText);
+}
+
+.vb-link{
+  text-decoration: none;
+  color: var(--primary);
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.vb-link:hover{ color: var(--primaryHover); }
+
+.vb-alert{
+  border: 1px solid var(--border);
+  background: var(--panel);
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-size: 13px;
+}
+
+.vb-alert-ok{ border-color: rgba(16, 185, 129, 0.35); }
+.vb-alert-error{ border-color: rgba(239, 68, 68, 0.35); }

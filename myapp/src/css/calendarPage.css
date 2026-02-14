@@ -1,13 +1,15 @@
-/* CalendarPage.css */
-
-/* Page wrapper (matches your dashboard vibe) */
-.vb-cal-page {
-  padding: 28px 32px;
+/* Page wrapper */
+.vb-cal-page{
   color: var(--text);
+  padding: 0;
+  width: 100%;
+  min-width: 0;
+  touch-action: pan-y; /* allow vertical scroll, but we handle horizontal swipe */
+
 }
 
-/* Header area */
-.vb-cal-head {
+/* Header */
+.vb-cal-head{
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
@@ -15,114 +17,117 @@
   margin-bottom: 14px;
 }
 
-.vb-cal-title {
+.vb-cal-title{
   margin: 0;
   font-size: 22px;
   font-weight: 750;
   letter-spacing: -0.01em;
 }
 
-/* Calendar card container */
-.vb-cal-card {
+/* Card container */
+.vb-cal-card{
   background: var(--panel);
   border: 1px solid var(--border);
   border-radius: 18px;
   padding: 12px;
-  margin-top: 0px;
 }
 
-/* -----------------------------
-   FullCalendar "Google-like" UI
------------------------------- */
+/* =========================
+   FullCalendar theme tweaks
+========================= */
 
-.vb-cal-card .fc {
+.vb-cal-card .fc{
   --fc-border-color: var(--border);
   --fc-page-bg-color: transparent;
   --fc-neutral-bg-color: transparent;
   --fc-today-bg-color: color-mix(in srgb, #4f46e5 10%, transparent);
+
   font-size: 13px;
 }
 
 /* Toolbar */
-.vb-cal-card .fc .fc-toolbar {
+.vb-cal-card .fc .fc-toolbar{
   margin-bottom: 10px !important;
   gap: 10px;
 }
 
-.vb-cal-card .fc .fc-toolbar-title {
+.vb-cal-card .fc .fc-toolbar-title{
   font-size: 16px;
   font-weight: 750;
 }
 
-/* Buttons (prev/next/today/views/custom) */
-.vb-cal-card .fc .fc-button {
+/* Buttons */
+.vb-cal-card .fc .fc-button{
   background: transparent !important;
   border: 1px solid var(--border) !important;
   color: var(--text) !important;
+
   border-radius: 10px !important;
   padding: 6px 10px !important;
+
   font-weight: 650 !important;
   box-shadow: none !important;
   outline: none !important;
 }
 
-.vb-cal-card .fc .fc-button:hover {
+.vb-cal-card .fc .fc-button:hover{
   background: var(--hover) !important;
 }
 
-.vb-cal-card .fc .fc-button:active {
+.vb-cal-card .fc .fc-button:active{
   transform: translateY(0.5px);
 }
 
-/* active view button */
-.vb-cal-card .fc .fc-button-primary.fc-button-active {
+/* Active view button */
+.vb-cal-card .fc .fc-button-primary.fc-button-active{
   background: var(--active) !important;
   border-color: color-mix(in srgb, #4f46e5 25%, var(--border)) !important;
   color: #4338ca !important;
 }
 
-/* Grid look */
-.vb-cal-card .fc .fc-scrollgrid {
+/* Grid rounding */
+.vb-cal-card .fc .fc-scrollgrid{
   border-radius: 14px;
   overflow: hidden;
 }
 
 /* Time labels */
-.vb-cal-card .fc .fc-timegrid-slot-label {
-  color: var(--lightText);
+.vb-cal-card .fc .fc-timegrid-slot-label{
+  color: var(--lightText, var(--muted));
   font-weight: 600;
 }
 
-/* Now indicator line */
-.vb-cal-card .fc .fc-timegrid-now-indicator-line {
+/* Now indicator */
+.vb-cal-card .fc .fc-timegrid-now-indicator-line{
   border-color: #ef4444 !important;
 }
-.vb-cal-card .fc .fc-timegrid-now-indicator-arrow {
+
+.vb-cal-card .fc .fc-timegrid-now-indicator-arrow{
   border-color: #ef4444 !important;
 }
 
 /* Events */
-.vb-cal-card .fc .fc-event {
+.vb-cal-card .fc .fc-event{
   border-radius: 10px !important;
   border: none !important;
   padding: 2px 6px !important;
   font-weight: 700;
 }
 
-.vb-cal-card .fc .fc-event-title {
+.vb-cal-card .fc .fc-event-title{
   font-weight: 750;
 }
 
 /* Selection highlight */
-.vb-cal-card .fc .fc-highlight {
+.vb-cal-card .fc .fc-highlight{
   background: color-mix(in srgb, #4f46e5 18%, transparent) !important;
 }
 
-/* -----------------------------
+/* =========================
    Modals (create/edit/confirm)
------------------------------- */
+========================= */
 
-.vb-modal-overlay {
+.vb-modal-overlay{
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.35);
@@ -132,7 +137,7 @@
   z-index: 9999;
 }
 
-.vb-modal {
+.vb-modal{
   width: 440px;
   max-width: calc(100vw - 24px);
   background: var(--panel);
@@ -142,19 +147,20 @@
   box-shadow: 0 20px 60px rgba(0,0,0,0.25);
 }
 
-.vb-modal h3 {
+.vb-modal h3{
   margin: 0 0 10px 0;
   font-size: 16px;
   font-weight: 750;
 }
 
-.vb-modal-meta {
+.vb-modal-meta{
   font-size: 12px;
-  color: var(--lightText);
+  color: var(--lightText, var(--muted));
   margin-bottom: 12px;
 }
 
-.vb-field-label {
+/* Form fields */
+.vb-field-label{
   display: block;
   margin-bottom: 6px;
   font-size: 13px;
@@ -164,7 +170,7 @@
 
 .vb-input,
 .vb-select,
-.vb-textarea {
+.vb-textarea{
   width: 100%;
   background: var(--bg);
   border: 1px solid var(--border);
@@ -174,27 +180,27 @@
   outline: none;
 }
 
-.vb-textarea {
+.vb-textarea{
   min-height: 90px;
   resize: vertical;
 }
 
 .vb-input:focus,
 .vb-select:focus,
-.vb-textarea:focus {
+.vb-textarea:focus{
   border-color: color-mix(in srgb, #4f46e5 45%, var(--border));
   box-shadow: 0 0 0 3px color-mix(in srgb, #4f46e5 18%, transparent);
 }
 
 /* Modal buttons */
-.vb-modal-actions {
+.vb-modal-actions{
   display: flex;
   gap: 10px;
   justify-content: flex-end;
   margin-top: 12px;
 }
 
-.vb-btn {
+.vb-btn{
   border: 1px solid var(--border);
   background: transparent;
   color: var(--text);
@@ -204,32 +210,32 @@
   cursor: pointer;
 }
 
-.vb-btn:hover {
+.vb-btn:hover{
   background: var(--hover);
 }
 
-.vb-btn-primary {
+.vb-btn-primary{
   background: #4f46e5;
   border-color: #4f46e5;
   color: white;
 }
 
-.vb-btn-primary:hover {
+.vb-btn-primary:hover{
   background: #4338ca;
   border-color: #4338ca;
 }
 
-.vb-btn-danger {
+.vb-btn-danger{
   border-color: color-mix(in srgb, #ef4444 35%, var(--border));
   color: #ef4444;
 }
 
-.vb-btn-danger:hover {
+.vb-btn-danger:hover{
   background: color-mix(in srgb, #ef4444 10%, transparent);
 }
 
 /* Edit modal layout */
-.vb-modal-split {
+.vb-modal-split{
   display: flex;
   gap: 10px;
   justify-content: space-between;
@@ -239,41 +245,82 @@
 }
 
 .vb-modal-left,
-.vb-modal-right {
+.vb-modal-right{
   display: flex;
   gap: 10px;
   align-items: center;
   flex-wrap: wrap;
 }
 
+/* =========================
+   Save bar
+========================= */
 
-/* Save bar */
-.vb-savebar {
+.vb-savebar{
   position: sticky;
   bottom: 14px;
   margin-top: 14px;
   z-index: 50;
+
   background: var(--panel);
   border: 1px solid var(--border);
   border-radius: 14px;
   padding: 10px 12px;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
+
   box-shadow: 0 16px 40px rgba(0,0,0,0.15);
 }
 
-.vb-savebar-left {
+.vb-savebar-left{
   font-weight: 700;
   color: var(--text);
 }
 
-.vb-savebar-right {
+.vb-savebar-right{
   display: flex;
   gap: 10px;
 }
 
-/* little helper spacing (replaces inline div spacer) */
-.vb-spacer-12 {
+/* Utility spacer */
+.vb-spacer-12{
   height: 12px;
+}
+
+/* =========================
+   Mobile: avoid double padding
+   (layout already adds padding)
+========================= */
+
+@media (max-width: 900px){
+  .vb-cal-page{
+    padding: 0;            /* key fix: prevent double padding */
+    touch-action: pan-y; /* allow vertical scroll, but we handle horizontal swipe */
+
+  }
+
+  .vb-cal-head{
+    padding: 0 2px;
+    margin-bottom: 10px;
+  }
+
+  .vb-cal-title{
+    font-size: 18px;
+  }
+
+  .vb-cal-card{
+    padding: 8px;
+    border-radius: 14px;
+  }
+
+  .vb-cal-card .fc .fc-toolbar{
+    gap: 6px;
+  }
+
+  .vb-modal{
+    width: 100%;
+    max-width: calc(100vw - 24px);
+  }
 }

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef} from "react";
 import { Link, useNavigate } from "react-router-dom";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -9,7 +9,7 @@ import { authHeader } from "../api/http";
 import "../css/calendarPage.css";
 import { API_BASE } from "../api";
 
-const API_URL = `${API_BASE}/api/`; 
+const API_URL = `${API_BASE}/api`; 
 
 type Customer = { id: string;
   full_name: string; 
@@ -130,7 +130,7 @@ export default function CalendarPage() {
     const c = customers.find((x) => String(x.id) === String(customerId));
     if (!c) return alert("Customer not found.");
 
-    const tempId = `tmp-${crypto.randomUUID()}`; // or Date.now()
+    const tempId = `tmp-${Date.now}`; // or Date.now()
 
     // 1) add a temporary event to the calendar UI
     setEvents((prev) => [
@@ -420,9 +420,65 @@ export default function CalendarPage() {
     setConfirmDelete(false);
   }
 
+  // Swipe thing here:
+  
+  const calRef = useRef<FullCalendar | null>(null);
+  const wrapRef = useRef<HTMLDivElement | null>(null);
+  
+  
+  
+
+  useEffect(() => {
+    const el = wrapRef.current;
+    if (!el) return;
+
+    let startX = 0;
+    let startY = 0;
+    let isTracking = false;
+
+    const minSwipePx = 60;      // how far to swipe
+    const maxOffAxisPx = 50;    // ignore if too vertical
+
+    function onTouchStart(e: TouchEvent) {
+      if (e.touches.length !== 1) return;
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+      isTracking = true;
+    }
+
+    function onTouchEnd(e: TouchEvent) {
+      if (!isTracking) return;
+      isTracking = false;
+
+      const endX = e.changedTouches[0].clientX;
+      const endY = e.changedTouches[0].clientY;
+
+      const dx = endX - startX;
+      const dy = endY - startY;
+
+      // Must be mostly horizontal + far enough
+      if (Math.abs(dx) < minSwipePx) return;
+      if (Math.abs(dy) > maxOffAxisPx) return;
+
+      const api = calRef.current?.getApi();
+      if (!api) return;
+
+      if (dx < 0) api.next();  // swipe left -> next week
+      else api.prev();         // swipe right -> previous week
+    }
+
+    el.addEventListener("touchstart", onTouchStart, { passive: true });
+    el.addEventListener("touchend", onTouchEnd, { passive: true });
+
+    return () => {
+      el.removeEventListener("touchstart", onTouchStart);
+      el.removeEventListener("touchend", onTouchEnd);
+    };
+  }, []);
+
 
   return (
-    <div className="vb-cal-page">
+    <div className="vb-cal-page" ref={wrapRef}>
       <div className="vb-cal-head">
         <div>
           <h2 className="vb-cal-title">Calendar</h2>
@@ -431,6 +487,7 @@ export default function CalendarPage() {
 
       <div className="vb-cal-card">
         <FullCalendar
+          ref={calRef}
           plugins={[timeGridPlugin, dayGridPlugin, interactionPlugin]}
           initialView="timeGridWeek"
           headerToolbar={{
@@ -455,6 +512,7 @@ export default function CalendarPage() {
           eventDrop={handleEventDrop}
           eventResize={handleEventResize}
           eventClick={handleEventClick}
+
         />
       </div>
 
