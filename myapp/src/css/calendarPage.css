@@ -4,8 +4,8 @@
   padding: 0;
   width: 100%;
   min-width: 0;
-  touch-action: pan-y; /* allow vertical scroll, but we handle horizontal swipe */
-
+  background: var(--bg);
+  touch-action: pan-y;
 }
 
 /* Header */
@@ -30,6 +30,7 @@
   border: 1px solid var(--border);
   border-radius: 18px;
   padding: 12px;
+  overflow: hidden;
 }
 
 /* =========================
@@ -40,9 +41,10 @@
   --fc-border-color: var(--border);
   --fc-page-bg-color: transparent;
   --fc-neutral-bg-color: transparent;
-  --fc-today-bg-color: color-mix(in srgb, #4f46e5 10%, transparent);
+  --fc-today-bg-color: transparent;
 
   font-size: 13px;
+  color: var(--text);
 }
 
 /* Toolbar */
@@ -54,6 +56,7 @@
 .vb-cal-card .fc .fc-toolbar-title{
   font-size: 16px;
   font-weight: 750;
+  color: var(--text);
 }
 
 /* Buttons */
@@ -61,10 +64,8 @@
   background: transparent !important;
   border: 1px solid var(--border) !important;
   color: var(--text) !important;
-
   border-radius: 10px !important;
   padding: 6px 10px !important;
-
   font-weight: 650 !important;
   box-shadow: none !important;
   outline: none !important;
@@ -78,11 +79,10 @@
   transform: translateY(0.5px);
 }
 
-/* Active view button */
 .vb-cal-card .fc .fc-button-primary.fc-button-active{
   background: var(--active) !important;
-  border-color: color-mix(in srgb, #4f46e5 25%, var(--border)) !important;
-  color: #4338ca !important;
+  border-color: color-mix(in srgb, var(--primary) 35%, var(--border)) !important;
+  color: var(--primary) !important;
 }
 
 /* Grid rounding */
@@ -93,7 +93,7 @@
 
 /* Time labels */
 .vb-cal-card .fc .fc-timegrid-slot-label{
-  color: var(--lightText, var(--muted));
+  color: var(--muted);
   font-weight: 600;
 }
 
@@ -118,13 +118,140 @@
   font-weight: 750;
 }
 
+/* Month-view events */
+.vb-cal-card .fc .fc-daygrid-event{
+  border-radius: 999px !important;
+  font-size: 12px;
+}
+
+.vb-cal-card .fc .fc-daygrid-event-harness{
+  margin-top: 2px;
+}
+
+.vb-cal-card .fc .fc-daygrid-dot-event{
+  padding: 0 6px;
+}
+
 /* Selection highlight */
 .vb-cal-card .fc .fc-highlight{
-  background: color-mix(in srgb, #4f46e5 18%, transparent) !important;
+  background: color-mix(in srgb, var(--primary) 18%, transparent) !important;
 }
 
 /* =========================
-   Modals (create/edit/confirm)
+   Header styles
+========================= */
+
+.vb-cal-card .fc .fc-col-header-cell-cushion{
+  text-decoration: none !important;
+  color: inherit !important;
+  padding: 0 !important;
+  display: block;
+}
+
+/* WEEK VIEW header */
+.vb-cal-card .fc .vb-dayhead{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 0 12px;
+}
+
+.vb-cal-card .fc .vb-dayname{
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.vb-cal-card .fc .vb-daynum{
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--text);
+  background: transparent;
+}
+
+.vb-cal-card .fc .vb-daynum.is-today{
+  background: var(--primary);
+  color: #fff;
+}
+
+/* MONTH VIEW header */
+.vb-cal-card .fc .vb-month-head{
+  text-align: left;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  padding: 10px 0 10px 12px;
+}
+
+/* =========================
+   Month view
+========================= */
+
+.vb-cal-card .fc .fc-daygrid-day.fc-day-today{
+  background: transparent !important;
+}
+
+.vb-cal-card .fc .fc-daygrid-day-frame{
+  min-height: 108px;
+}
+
+.vb-cal-card .fc .fc-daygrid-day-top{
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 6px 8px 0 8px;
+}
+
+.vb-cal-card .fc .fc-daygrid-day-number{
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text);
+  text-decoration: none !important;
+  line-height: 1;
+}
+
+.vb-cal-card .fc .fc-day-other .fc-daygrid-day-number{
+  color: var(--muted);
+  opacity: 0.55;
+}
+
+.vb-cal-card .fc .fc-day-today .fc-daygrid-day-number{
+  background: var(--primary);
+  color: #fff;
+  font-weight: 700;
+}
+
+.vb-cal-card .fc .fc-daygrid-body .fc-daygrid-day-events{
+  margin-top: 2px;
+  padding: 0 4px;
+}
+
+/* Hide half-hour lines */
+.vb-cal-card .fc .fc-timegrid-slot-minor{
+  border-top-style: none !important;
+}
+
+.vb-cal-card .fc .fc-timegrid-slot-minor td{
+  border-top-style: none !important;
+}
+
+/* =========================
+   Modals
 ========================= */
 
 .vb-modal-overlay{
@@ -151,11 +278,12 @@
   margin: 0 0 10px 0;
   font-size: 16px;
   font-weight: 750;
+  color: var(--text);
 }
 
 .vb-modal-meta{
   font-size: 12px;
-  color: var(--lightText, var(--muted));
+  color: var(--muted);
   margin-bottom: 12px;
 }
 
@@ -188,8 +316,8 @@
 .vb-input:focus,
 .vb-select:focus,
 .vb-textarea:focus{
-  border-color: color-mix(in srgb, #4f46e5 45%, var(--border));
-  box-shadow: 0 0 0 3px color-mix(in srgb, #4f46e5 18%, transparent);
+  border-color: color-mix(in srgb, var(--primary) 45%, var(--border));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 18%, transparent);
 }
 
 /* Modal buttons */
@@ -215,14 +343,14 @@
 }
 
 .vb-btn-primary{
-  background: #4f46e5;
-  border-color: #4f46e5;
+  background: var(--primary);
+  border-color: var(--primary);
   color: white;
 }
 
 .vb-btn-primary:hover{
-  background: #4338ca;
-  border-color: #4338ca;
+  background: var(--primaryHover);
+  border-color: var(--primaryHover);
 }
 
 .vb-btn-danger{
@@ -252,6 +380,54 @@
   flex-wrap: wrap;
 }
 
+.vb-appt-info{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.vb-appt-row{
+  display: flex;
+  flex-direction: left;
+  gap: 4px;
+  padding: 10px 12px;
+
+  background: transparent;   /* was looking button-like */
+  box-shadow: none;
+  transform: none;
+  cursor: default;           /* important */
+  transition: none;          /* important */
+}
+
+.vb-appt-row:hover{
+  background: transparent;
+  transform: none;
+  box-shadow: none;
+}
+
+.vb-appt-row:active{
+  transform: none;
+}
+
+.vb-appt-row-notes{
+  min-height: 72px;
+}
+
+.vb-appt-label{
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+  pointer-events: none;
+}
+
+.vb-appt-value{
+  font-size: 14px;
+  color: var(--text);
+  word-break: break-word;
+  pointer-events: none;
+}
+
 /* =========================
    Save bar
 ========================= */
@@ -261,16 +437,13 @@
   bottom: 14px;
   margin-top: 14px;
   z-index: 50;
-
   background: var(--panel);
   border: 1px solid var(--border);
   border-radius: 14px;
   padding: 10px 12px;
-
   display: flex;
   align-items: center;
   justify-content: space-between;
-
   box-shadow: 0 16px 40px rgba(0,0,0,0.15);
 }
 
@@ -290,15 +463,13 @@
 }
 
 /* =========================
-   Mobile: avoid double padding
-   (layout already adds padding)
+   Mobile
 ========================= */
 
 @media (max-width: 900px){
   .vb-cal-page{
-    padding: 0;            /* key fix: prevent double padding */
-    touch-action: pan-y; /* allow vertical scroll, but we handle horizontal swipe */
-
+    padding: 0;
+    touch-action: pan-y;
   }
 
   .vb-cal-head{
@@ -323,4 +494,345 @@
     width: 100%;
     max-width: calc(100vw - 24px);
   }
+
+  .vb-cal-card .fc .vb-daynum{
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+  }
+
+  .vb-cal-card .fc .fc-daygrid-day-frame{
+    min-height: 92px;
+  }
+}
+
+.vb-modal{
+  width: 440px;
+  max-width: calc(100vw - 24px);
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 16px 18px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+}
+
+.vb-appt-topbar{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.vb-appt-action{
+  display: flex;
+  gap: 5px;
+}
+
+.vb-icon-btn{
+  width: 34px;
+  height: 34px;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  box-shadow: none;
+  transition: background 0.15s ease;
+}
+
+.vb-icon-btn:hover{
+  background: var(--hover);
+}
+
+.vb-icon-btn:active{
+  transform: none;
+}
+
+.vb-appt-header{
+  margin-bottom: 14px;
+}
+
+.vb-appt-title{
+  margin: 0 0 6px 0;
+  font-size: 28px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+.vb-appt-time{
+  font-size: 15px;
+  color: var(--text);
+  opacity: 0.9;
+}
+
+.vb-appt-details{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.vb-appt-line{
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.vb-appt-detail-label{
+  color: var(--muted);
+  min-width: 120px;
+  flex-shrink: 0;
+}
+
+.vb-edit-notes-wrap{
+  margin-top: 16px;
+}
+
+.vb-edit-overlay{
+  position: fixed;
+  inset: 0;
+  background: transparent;
+  z-index: 9999;
+}
+
+.vb-edit-panel{
+  position: fixed;
+  width: 420px;
+  max-width: calc(100vw - 24px);
+  background: var(--panel);
+  border: 0;
+  border-radius: 24px;
+  padding: 16px 18px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.28);
+  z-index: 10000;
+  animation-duration: 180ms;
+  animation-timing-function: ease-out;
+  animation-fill-mode: both;
+}
+
+.vb-edit-panel.is-left{
+  animation-name: vb-slide-in-left;
+}
+
+.vb-edit-panel.is-right{
+  animation-name: vb-slide-in-right;
+}
+
+@keyframes vb-slide-in-left{
+  from{
+    opacity: 0;
+    transform: translateX(18px);
+  }
+  to{
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes vb-slide-in-right{
+  from{
+    opacity: 0;
+    transform: translateX(-18px);
+  }
+  to{
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@media (max-width: 900px){
+  .vb-edit-panel{
+    left: 12px !important;
+    right: 12px;
+    top: 70px !important;
+    width: auto;
+    max-width: none;
+    animation-name: vb-mobile-edit-in !important;
+  }
+
+  @keyframes vb-mobile-edit-in{
+    from{
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to{
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+.vb-edit-panel.is-left.is-closing{
+  animation-name: vb-slide-out-left;
+}
+
+.vb-edit-panel.is-right.is-closing{
+  animation-name: vb-slide-out-right;
+}
+
+@keyframes vb-slide-out-left{
+  from{
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to{
+    opacity: 0;
+    transform: translateX(18px);
+  }
+}
+
+@keyframes vb-slide-out-right{
+  from{
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to{
+    opacity: 0;
+    transform: translateX(-18px);
+  }
+}
+
+.vb-dayhead-single{
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  padding: 4px 8px;
+  min-height: 34px;
+  text-align: left;
+}
+
+.vb-dayhead-single .vb-dayname{
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+}
+
+.vb-dayhead-single .vb-daynum{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.vb-cal-card .fc .fc-timeGridDay-view .fc-col-header-cell-cushion{
+  width: 100%;
+  padding: 0 !important;
+}
+
+.vb-cal-card .fc .fc-timeGridDay-view .fc-col-header-cell{
+  padding: 0 !important;
+}
+
+.vb-view-picker{
+  position: relative;
+}
+
+.vb-view-menu{
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 140px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.16);
+  padding: 6px;
+  z-index: 200;
+}
+
+.vb-view-menu-item{
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+  padding: 10px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  font: inherit;
+}
+
+.vb-view-menu-item:hover{
+  background: var(--hover);
+}
+
+.vb-customer-picker{
+  position: relative;
+}
+
+.vb-customer-menu{
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  max-height: 220px;
+  overflow-y: auto;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.16);
+  padding: 6px;
+  z-index: 30;
+}
+
+.vb-customer-option{
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+  padding: 10px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.vb-customer-option:hover{
+  background: var(--hover);
+}
+
+.vb-customer-name{
+  font-weight: 650;
+}
+
+.vb-customer-phone{
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.vb-customer-empty{
+  padding: 10px 12px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.vb-icon-btn-img{
+  width: 16px;
+  height: 16px;
+  display: block;
+  object-fit: contain;
+  filter: none !important;
+  opacity: 1;
+}
+
+.vb-icon-btn:hover{
+  background: var(--hover);
 }

@@ -1,36 +1,58 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { authHeader } from "../api/http"; 
-
+import { authHeader } from "../api/http";
 import { API_BASE } from "../api";
+import "../css/appointments.css";
 
 interface Appointment {
    id: string;
    customer_id: string;
    start_time: string;
    end_time: string;
-   notes: string;
+   notes?: string;
 }
 
 interface Customer {
    id: string;
    full_name: string;
+   phone_number?: string;
+   color?: string;
+}
+
+interface AppointmentWithCustomer extends Appointment {
+   full_name?: string;
+   phone_number?: string;
+   color?: string;
 }
 
 const API_URL = `${API_BASE}/api`;
+
+function formatDate(iso: string) {
+   const d = new Date(iso);
+   return d.toLocaleDateString(undefined, {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+   });
+}
+
+function formatTime(iso: string) {
+   const d = new Date(iso);
+   return d.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+   });
+}
 
 export default function Appointments() {
    const navigate = useNavigate();
 
    const [appointments, setAppointments] = useState<Appointment[]>([]);
    const [customers, setCustomers] = useState<Customer[]>([]);
-   const [customerId, setCustomerId] = useState("");
-   const [startTime, setStartTime] = useState("");
-   const [endTime, setEndTime] = useState("");
-   const [notes, setNotes] = useState("");
-   
+   const [loading, setLoading] = useState(true);
+   const [query, setQuery] = useState("");
+   const [tab, setTab] = useState<"upcoming" | "past" | "all">("all");
 
-   // Fetch customers & appointments
    useEffect(() => {
       const token = localStorage.getItem("token");
       if (!token) {
@@ -38,151 +60,178 @@ export default function Appointments() {
          return;
       }
 
-      // Load customers
-      fetch(`${API_URL}/customers`, {
-         headers: { ...authHeader() },
-      })
-         .then(async (res) => {
-            if (res.status === 401) {
-            navigate("/");
-            throw new Error("Unauthorized");
+      (async () => {
+         try {
+            const [customersRes, appointmentsRes] = await Promise.all([
+               fetch(`${API_URL}/customers`, {
+                  headers: { ...authHeader() },
+               }),
+               fetch(`${API_URL}/appointments`, {
+                  headers: { ...authHeader() },
+               }),
+            ]);
+
+            if (customersRes.status === 401 || appointmentsRes.status === 401) {
+               navigate("/");
+               return;
             }
-            return res.json();
-         })
-         .then(setCustomers)
-         .catch((err) => console.error("Error loading customers:", err));
 
-      // Load appointments
-      fetch(`${API_URL}/appointments`, {
-         headers: { ...authHeader() },
-      })
-         .then(async (res) => {
-            if (res.status === 401) {
-            navigate("/");
-            throw new Error("Unauthorized");
-            }
-            return res.json();
-         })
-         .then(setAppointments)
-         .catch((err) => console.error("Error loading appointments:", err));
-      }, [navigate]);
+            if (!customersRes.ok) throw new Error("Failed to load customers");
+            if (!appointmentsRes.ok) throw new Error("Failed to load appointments");
 
+            const customersData = (await customersRes.json()) as Customer[];
+            const appointmentsData = (await appointmentsRes.json()) as Appointment[];
 
-   // Add appointment
-   async function handleAddAppointment(e: React.FormEvent) {
-      e.preventDefault();
+            appointmentsData.sort(
+               (a, b) =>
+                  new Date(a.start_time).getTime() - new Date(b.start_time).getTime()
+            );
 
-      if (!customerId || !startTime || !endTime) {
-         alert("Please fill in all required fields.");
-         return;
+            setCustomers(customersData);
+            setAppointments(appointmentsData);
+         } catch (err) {
+            console.error("Appointments page load error:", err);
+         } finally {
+            setLoading(false);
+         }
+      })();
+   }, [navigate]);
+
+   const mergedAppointments = useMemo<AppointmentWithCustomer[]>(() => {
+      return appointments.map((a) => {
+         const customer = customers.find((c) => c.id === a.customer_id);
+
+         return {
+            ...a,
+            full_name: customer?.full_name || "Unknown patient",
+            phone_number: customer?.phone_number || "",
+            color: customer?.color || "#3b82f6",
+         };
+      });
+   }, [appointments, customers]);
+
+   const filteredAppointments = useMemo(() => {
+      const now = Date.now();
+      const q = query.trim().toLowerCase();
+
+      let list = [...mergedAppointments];
+
+      if (tab === "upcoming") {
+         list = list.filter((a) => new Date(a.end_time).getTime() >= now);
+      } else if (tab === "past") {
+         list = list.filter((a) => new Date(a.end_time).getTime() < now);
       }
 
-      const newAppointment = {
-         customer_id: customerId || null,
-         start_time: startTime ? startTime + ":00" : null,
-         end_time: endTime ? endTime + ":00" : null,
-         notes: notes || "",
-      };
-
-      try {
-         const res = await fetch(`${API_URL}/appointments`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json",
-               ...authHeader(),
-             },
-            body: JSON.stringify(newAppointment),
+      if (q) {
+         list = list.filter((a) => {
+            const name = String(a.full_name ?? "").toLowerCase();
+            const phone = String(a.phone_number ?? "").toLowerCase();
+            return name.includes(q) || phone.includes(q);
          });
-
-         if (!res.ok) throw new Error("Failed to add appointment");
-
-         const data = await res.json();
-         setAppointments([...appointments, data]);
-
-         // Reset form
-         setCustomerId("");
-         setStartTime("");
-         setEndTime("");
-         setNotes("");
-      } catch (err) {
-         console.error(err);
-         alert("Error adding appointment");
       }
+
+      return list;
+   }, [mergedAppointments, query, tab]);
+
+   if (loading) {
+      return (
+         <div className="vb-appt-page">
+            <div className="vb-panel">
+               <div className="vb-appt-loading">Loading appointments…</div>
+            </div>
+         </div>
+      );
    }
 
    return (
-      <div className="min-h-screen bg-gray-100 flex flex-col items-center p-6">
-         <div className="bg-white shadow-md rounded-xl p-6 w-full max-w-3xl">
-            <h2 className="text-2xl font-semibold mb-4 text-center">
-               Appointments
-            </h2>
+      <div className="vb-appt-page">
+         <div className="vb-panel">
+            <div className="vb-panel-head">
+               <div>
+                  <h3 className="vb-panel-title">Appointments</h3>
+                  <p className="vb-appt-subtitle">
+                     View and search appointments by status, patient name, or phone number.
+                  </p>
+               </div>
 
-            {/* Add Appointment Form */}
-            <form onSubmit={handleAddAppointment} className="mb-6 grid grid-cols-1 gap-4">
-               <select
-                  className="border p-2 rounded"
-                  value={customerId}
-                  onChange={(e) => setCustomerId(e.target.value)}
+               <div className="vb-appt-actions">
+                  <input
+                     className="vb-input vb-appt-search"
+                     placeholder="Search by patient name or phone number…"
+                     value={query}
+                     onChange={(e) => setQuery(e.target.value)}
+                  />
+               </div>
+            </div>
+
+            <div className="vb-appt-tabs">
+               <button
+                  className={`vb-appt-tab ${tab === "upcoming" ? "vb-appt-tab-active" : ""}`}
+                  onClick={() => setTab("upcoming")}
+                  type="button"
                >
-                  <option value="">Select Customer</option>
-                  {customers.map((c) => (
-                     <option key={c.id} value={c.id}>
-                        {c.full_name}
-                     </option>
-                  ))}
-               </select>
-
-               <input
-                  type="datetime-local"
-                  className="border p-2 rounded"
-                  value={startTime}
-                  onChange={(e) => setStartTime(e.target.value)}
-               />
-               <input
-                  type="datetime-local"
-                  className="border p-2 rounded"
-                  value={endTime}
-                  onChange={(e) => setEndTime(e.target.value)}
-               />
-               <input
-                  type="text"
-                  placeholder="Notes (optional)"
-                  className="border p-2 rounded"
-                  value={notes}
-                  onChange={(e) => setNotes(e.target.value)}
-               />
+                  Upcoming
+               </button>
 
                <button
-                  type="submit"
-                  className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
+                  className={`vb-appt-tab ${tab === "past" ? "vb-appt-tab-active" : ""}`}
+                  onClick={() => setTab("past")}
+                  type="button"
                >
-                  Add Appointment
+                  Past
                </button>
-            </form>
 
-            {/* Appointment List */}
-            <table className="w-full text-left border">
-               <thead>
-                  <tr className="bg-gray-200">
-                     <th className="p-2 border">Customer</th>
-                     <th className="p-2 border">Start</th>
-                     <th className="p-2 border">End</th>
-                     <th className="p-2 border">Notes</th>
-                  </tr>
-               </thead>
-               <tbody>
-                  {appointments.map((a) => {
-                     const customer = customers.find((c) => c.id === a.customer_id);
-                     return (
-                        <tr key={a.id} className="border-t">
-                           <td className="p-2 border">{customer?.full_name || "Unknown"}</td>
-                           <td className="p-2 border">{new Date(a.start_time).toLocaleString()}</td>
-                           <td className="p-2 border">{new Date(a.end_time).toLocaleString()}</td>
-                           <td className="p-2 border">{a.notes}</td>
-                        </tr>
-                     );
-                  })}
-               </tbody>
-            </table>
+               <button
+                  className={`vb-appt-tab ${tab === "all" ? "vb-appt-tab-active" : ""}`}
+                  onClick={() => setTab("all")}
+                  type="button"
+               >
+                  All
+               </button>
+            </div>
+
+            <div className="vb-appt-list">
+               {filteredAppointments.length === 0 ? (
+                  <div className="vb-appt-empty">No appointments found for this filter.</div>
+               ) : (
+                  filteredAppointments.map((a) => (
+                     <button
+                        className="vb-appt-row"
+                        key={a.id}
+                        type="button"
+                        onClick={() =>
+                           navigate("/calendar", {
+                              state: {
+                                 focusAppointmentId: a.id,
+                                 focusDate: a.start_time,
+                              },
+                           })
+                        }
+                     >
+                        <span
+                           className="vb-appt-color"
+                           style={{ backgroundColor: a.color || "#3b82f6" }}
+                        />
+
+                        <div className="vb-appt-main">
+                           <div className="vb-appt-name">{a.full_name || "Unknown patient"}</div>
+                           <div className="vb-appt-phone">{a.phone_number || "-"}</div>
+                        </div>
+
+                        <div className="vb-appt-dateblock">
+                           <div className="vb-appt-date">{formatDate(a.start_time)}</div>
+                           <div className="vb-appt-time">
+                              {formatTime(a.start_time)} – {formatTime(a.end_time)}
+                           </div>
+                        </div>
+
+                        <div className="vb-appt-notes">
+                           {a.notes && a.notes.trim() !== "" ? a.notes : "No notes"}
+                        </div>
+                     </button>
+                  ))
+               )}
+            </div>
          </div>
       </div>
    );

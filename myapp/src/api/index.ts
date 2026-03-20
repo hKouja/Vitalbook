@@ -1,5 +1,9 @@
-export const API_BASE = import.meta.env.VITE_API_BASE as string;
+// auto target the same host the frontend is running on
+// this can help with the issue I had at campus eduroam wifi
 
-if (!API_BASE) {
-  throw new Error("VITE_API_BASE is missing. Check myapp/.env and restart Vite.");
-}
+const envBase = (import.meta as any)?.env?.VITE_API_BASE as string | undefined;
+
+export const API_BASE =
+  (envBase && envBase.trim().length > 0)
+    ? envBase.trim().replace(/\/+$/, "")
+    : `http://${window.location.hostname}:4000`;

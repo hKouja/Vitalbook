@@ -33,6 +33,7 @@ interface Appointment {
    const [fullName, setFullName] = useState("");
    const [appointmentsToday, setAppointmentsToday] = useState(0);
    const [totalCustomers, setTotalCustomers] = useState(0);
+   const [nbrOfAppointments, setNbrOfAppointments] = useState(0);
 
    const [todayList, setTodayList] = useState<Appointment[]>([]);
 
@@ -76,6 +77,18 @@ interface Appointment {
             );
             setAppointmentsToday(sorted.length);
             setTodayList(sorted);
+         })
+         .catch((err) => console.error("Appointments fetch error:", err));
+
+      fetch(
+         `${API_URL}/appointments/upcoming?start=${encodeURIComponent(new Date().toISOString())}`,
+         {
+            headers: { Authorization: `Bearer ${token}` },
+         }
+      )
+         .then((res) => res.json())
+         .then((data: Appointment[]) => {
+            setNbrOfAppointments(data.length);
          })
          .catch((err) => console.error("Appointments fetch error:", err));
    }, [navigate]);
@@ -129,8 +142,8 @@ interface Appointment {
 
             <div className="vb-card">
             <div>
-               <div className="vb-card-label">This Week</div>
-               <div className="vb-card-value">—</div>
+               <div className="vb-card-label">Booked appointments</div>
+               <div className="vb-card-value">{nbrOfAppointments}</div>
             </div>
             <div className="vb-card-icon vb-icon-amber">
                <img 

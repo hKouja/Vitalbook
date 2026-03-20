@@ -35,6 +35,8 @@
   background: var(--bg);
   color: var(--text);
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Liberation Sans";
+
+  height: 100vh;
 }
 
 /* =========================
@@ -48,6 +50,11 @@
   padding: 20px 16px;
   display: flex;
   flex-direction: column;
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
 }
 
 .vb-brand{
@@ -92,6 +99,8 @@
   flex-direction: column;
   gap: 6px;
   margin-top: 8px;
+
+  flex: 1;
 }
 
 .vb-nav-item{
@@ -214,9 +223,13 @@
 ========================= */
 .vb-main{
   flex: 1;
-  width: 100%;
   min-width: 0;
   padding: 28px 32px;
+
+  margin-left: 260px;
+  width: calc(100% - 260px);
+  height: 100vh;
+  overflow-y: auto;
 }
 
 /* =========================
@@ -454,6 +467,10 @@
 
   .vb-main{
     padding: 16px;
+    margin-left: 0;
+    width: 100%;
+    height: auto;
+    overflow-y: visible;
   }
 }
 

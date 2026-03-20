@@ -141,6 +141,27 @@ router.get("/appointments/week", requireAuth, async (req, res) => {
       res.status(500).json({ error: "Failed to load appointments" });
    }
 });
+//Get upcoming appointments
+router.get("/appointments/upcoming", requireAuth, async (req, res) => {
+   try {
+      const created_by = req.user!.id;
+      const { start } = req.query;
+
+      const result = await pool.query(
+         `SELECT *
+          FROM appointments
+          WHERE created_by = $1
+            AND start_time >= $2
+          ORDER BY start_time ASC`,
+         [created_by, start]
+      );
+
+      res.json(result.rows);
+   } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: "Failed to fetch upcoming appointments" });
+   }
+});
 
 
 

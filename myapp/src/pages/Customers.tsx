@@ -174,7 +174,12 @@ export default function Customers() {
 						</div>
 					) : (
 						filtered.map((c) => (
-							<div className="vb-cust-row" key={c.id}>
+							<button
+								className="vb-cust-row"
+								key={c.id}
+								type="button"
+								onClick={() => navigate(`/customers/${c.id}`)}
+							>
 								<span
 									className="vb-cust-dot"
 									style={{ backgroundColor: c.color || "#3b82f6" }}
@@ -190,7 +195,7 @@ export default function Customers() {
 									</div>
 									{/* later: View Edit buttons or a 3-dot menu */}
 								</div>
-							</div>
+							</button>
 						))
 					)}
 				</div>

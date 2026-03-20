@@ -215,7 +215,7 @@ export default function Layout() {
     </button>
   </header>
 
-  <Outlet />
+  <Outlet context={{ isDark, ThemeIcon }} />
 </main>
 
 

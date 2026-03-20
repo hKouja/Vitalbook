@@ -7,6 +7,7 @@ import Appointments from "./pages/Appointments";
 //import Calendar from "./pages/Calendar";
 import CalendarPage from "./pages/CalendarPage";
 import Layout from "./layout/Layout";
+import CustomerDetails from "./pages/CustomerDetails";
 
 //<Route path="/calendar" element={<Calendar />} />
 
@@ -23,7 +24,8 @@ export default function App() {
                <Route path="/dashboard" element={<Dashboard/>} />
                <Route path="/customers" element={<Customers/>} />
                <Route path="/appointments" element={<Appointments />} />
-               <Route path="/calendar" element={<CalendarPage />} />   
+               <Route path="/calendar" element={<CalendarPage />} />  
+               <Route path="/customers/:id" element={<CustomerDetails />} /> 
             </Route>
          </Routes>
       </BrowserRouter>
